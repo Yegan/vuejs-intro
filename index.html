@@ -5,6 +5,8 @@
     <title></title>
     <link rel="stylesheet" href="css/skeleton.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+
   </head>
   <body>
     <div class="container">
@@ -39,7 +41,8 @@
         </div>
       </div>
       <div class="row">
-        <div class="six columns box">
+        <!-- CALCULATE BILL -->
+        <div class="calculateBill six columns box">
           <h3>Calculate bill</h3>
           Enter a string with 'call' or 'sms' seperated by commas. When the Calculate button is pressed show the total phone bill for the string entered.
 
@@ -58,16 +61,17 @@
           <div class="row">
             <div class="eight columns">
               <h5>Enter bill string</h5>
-              <textarea name="name" rows="20" cols="40" class="billString" class="billString" ></textarea>
-              <button class="button-primary calculateBtn" on type="button" name="button">Calculate</button>
+              <textarea name="name" rows="20" cols="40" v-model='billString' class="billString" class="billString" ></textarea>
+              <button class="button-primary calculateBtn" v-on:click='calculate' on type="button" name="button">Calculate</button>
             </div>
             <div class="four columns">
               <strong>Total amount:</strong>
-              <span class="total ">R<span class="billTotal">0.00</span> </span>
+              <span class="total ">R<span class="billTotal">{{billTotal}}</span> </span>
             </div>
           </div>
         </div>
-        <div class="six columns box">
+        <div class="billTypeText six columns box">
+          <!-- Text bill -->
           <h3>Text input bill</h3>
 
           <div class="">
@@ -87,23 +91,23 @@
             <div class="six columns">
 
               <label for="">Bill type</label>
-              <input type="text" name="" value="" placeholder="enter 'call' or 'sms' " class="billTypeText">
-              <button class="button-primary addToBillBtn" type="button" name="button" >Add</button>
+              <input v-model='billType' type="text" name="" value="" placeholder="enter 'call' or 'sms' " class="">
+              <button v-on:click='addAction' class="button-primary addToBillBtn" type="button" name="button" >Add</button>
           </div>
             <div class="six columns">
               <h5>Totals</h5>
               <table>
                 <tr>
                   <td>Call total</td>
-                  <td>R<span class="callTotalOne">27.50</span></td>
+                  <td>R<span class="callTotalOne">{{callTotal}}</span></td>
                 </tr>
                 <tr>
                   <td>SMS total</td>
-                  <td>R<span class="smsTotalOne">13.75</span></td>
+                  <td>R<span class="smsTotalOne">{{smsTotal}}</span></td>
                 </tr>
                 <tr>
                   <td>Total</td>
-                  <td class="red">R<span class="totalOne">41.25</span></td>
+                  <td class="red">R<span class="totalOne">{{totalPhoneBill}}</span></td>
                 </tr>
               </table>
             </div>
@@ -112,7 +116,7 @@
 
       </div>
       <div class="row">
-        <div class="six columns box">
+        <div class="radioBill six columns box">
           <h3>Radio button bill</h3>
 
           <div class="">
@@ -134,38 +138,38 @@
           <hr>
 
           <div class="row">
-            <div class="six columns">
+            <div class=" six columns">
               <h5>Bill type</h5>
               <label class="">
-                <input type="radio" name="billItemType" class="billItemTypeRadio" value="call">
+                <input v-model='dataType' type="radio" name="billItemType" class="billItemTypeRadio" value="call">
                 <span class="label-body">Call</span>
               </label>
               <label class="">
-                <input type="radio" name="billItemType" class="billItemTypeRadio" value="sms">
+                <input v-model='dataType' type="radio" name="billItemType" class="billItemTypeRadio" value="sms">
                 <span class="label-body" >SMS</span>
               </label>
-              <button class="button-primary radioBillAddBtn" type="button" name="button">Add</button>
+              <button  v-on:click='addAction' class="button-primary radioBillAddBtn" type="button" name="button">Add</button>
             </div>
             <div class="six columns">
                   <h5>Totals</h5>
                   <table>
                     <tr>
                       <td>Call total</td>
-                      <td>R<span class="callTotalTwo">34.50</span></td>
+                      <td>R<span class="callTotalTwo">{{callTotal}}</span></td>
                     </tr>
                     <tr>
                       <td>SMS total</td>
-                      <td>R<span class="smsTotalTwo">3.00</span></td>
+                      <td>R<span class="smsTotalTwo">{{smsTotal}}</span></td>
                     </tr>
                     <tr >
                       <td>Total</td>
-                      <td class="orange" >R<span class="totalTwo">37.50</span></td>
+                      <td class="orange" >R<span class="totalTwo">{{totalBill}}</span></td>
                     </tr>
                   </table>
             </div>
           </div>
         </div>
-        <div class="six columns box">
+        <div class="billWithSettings six columns box">
           <h3>Bill with settings</h3>
           <div class="">
             Select the call or sms radio button. Update the appropriate total and the overall total when the ADD button in pressed.
@@ -199,15 +203,15 @@
                   <table>
                     <tr>
                       <td>Call total</td>
-                      <td>R<span class="callTotalSettings">34.00</span> </td>
+                      <td>R<span class="callTotalSettings">{{callTotal}}</span> </td>
                     </tr>
                     <tr>
                       <td>SMS total</td>
-                      <td>R<span class="smsTotalSettings">7.35</span> </td>
+                      <td>R<span class="smsTotalSettings">{{smsTotal}}</span> </td>
                     </tr>
                     <tr>
                       <td>Total</td>
-                      <td> R<span class="totalSettings">41.35</span> </td>
+                      <td> R<span class="totalSettings">{{totalCost}}</span> </td>
                     </tr>
                   </table>
 
@@ -215,13 +219,13 @@
             <div class="six columns">
               <h5>Settings</h5>
               <label for="exampleEmailInput">Call cost</label>
-              <input class="u-full-width callCostSetting" type="number" placeholder="eg. 2.55">
+              <input v-model='callCost' class="u-full-width callCostSetting" type="number" placeholder="eg. 2.55">
               <label for="exampleEmailInput">SMS cost</label>
-              <input class="u-full-width smsCostSetting" type="number" placeholder="eg. 0.65" >
+              <input v-model='smsCost' class="u-full-width smsCostSetting" type="number" placeholder="eg. 0.65" >
               <label for="">Warning level</label>
-              <input class="u-full-width warningLevelSetting " type="number" placeholder="eg. 30.00" class="warningLevel" >
+              <input v-model='warningCost' class="u-full-width warningLevelSetting " type="number" placeholder="eg. 30.00" class="warningLevel" >
               <label for="">Critical level</label>
-              <input class="u-full-width criticalLevelSetting" type="number" placeholder="eg. 65.00" >
+              <input v-model='criticalCost' class="u-full-width criticalLevelSetting" type="number" placeholder="eg. 65.00" >
               <button class="button-primary updateSettings" type="button" name="button">Update settings</button>
 
             </div>
@@ -233,7 +237,6 @@
     <script src="js/text-bill.js" charset="utf-8"></script>
     <script src="js/radio-bill.js" charset="utf-8"></script>
     <script src="js/settings-bill.js" charset="utf-8"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 
 
   </body>

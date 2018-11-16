@@ -10,3 +10,27 @@
 // * add the appropriate value to the running total
 // * add nothing for invalid values that is not 'call' or 'sms'.
 // * display the latest total on the screen
+let radioBill= new Vue({
+    el: '.radioBill',
+    data:{
+        dataType: '',
+        callTotal: 0,
+        smsTotal:0,
+    },
+    computed:{
+        totalBill:function(){
+            let total = this.callTotal + this.smsTotal
+            return total
+        }
+    },
+        methods:{
+            addAction: function(billTypeEntered){
+                billTypeEntered = this.dataType;
+                if (billTypeEntered === "call") {
+                    this.callTotal += 2.75;
+                } else if (billTypeEntered === "sms") {
+                    this.smsTotal += 0.75;
+                }
+            }
+        }
+    });
